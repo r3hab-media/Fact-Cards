@@ -1,0 +1,192 @@
+:root {
+	--deck-w: min(82vw, 420px);
+	--deck-h: min(72vh, 600px);
+}
+html,
+body {
+	overflow: hidden;
+}
+
+/* Portrait-only UI */
+.rotate-msg {
+	display: none;
+}
+@media (orientation: landscape) {
+	.app {
+		display: none !important;
+	}
+	.rotate-msg {
+		display: flex !important;
+		height: 100vh;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+		text-align: center;
+	}
+}
+
+body {
+	background: #0b0d14;
+	color: #cbd5e1;
+	min-height: 100vh;
+}
+.app {
+	padding: 16px;
+}
+
+.topbar {
+	max-width: var(--deck-w);
+	margin: 0 auto 12px auto;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.topbar .controls-row {
+	display: flex;
+	gap: 8px;
+}
+
+/* Deck area */
+.deck-wrap {
+	position: relative;
+	width: var(--deck-w);
+	height: var(--deck-h);
+	margin: 0 auto;
+	touch-action: pan-y;
+	user-select: none;
+}
+
+/* Clamp + fade for long facts */
+.fact-text {
+	display: -webkit-box;
+	-webkit-line-clamp: 8;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 0.25rem;
+}
+.fact-text.clamped::after {
+	content: "";
+	position: absolute;
+	inset: auto 0 0 0;
+	height: 3rem;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0), currentColor 85%);
+	opacity: 0.15;
+	pointer-events: none;
+}
+.read-more {
+	align-self: flex-start;
+	/* border: 0; */
+	background: transparent;
+	text-decoration: none;
+	/* padding: 0; */
+	/* font-size: 0.9rem; */
+	opacity: 0.9;
+}
+
+/* Card styling */
+.card-item {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	border: 0;
+	border-radius: 16px;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+	transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+	will-change: transform;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+.card-item .card-body {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.card-body .badge.rounded-pill {
+  border-radius: 4px!important;
+}
+
+/* Media and icons */
+.card-media {
+	border-radius: 12px;
+	overflow: hidden;
+}
+.card-media-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+.card-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+.card-icon i {
+	font-size: 3.5rem;
+	line-height: 1;
+	opacity: 0.9;
+}
+
+/* Fan effect */
+.card-item[data-depth="0"] {
+	z-index: 50;
+}
+.card-item[data-depth="1"] {
+	z-index: 40;
+	transform: translateY(6px) scale(0.99) rotate(-3deg);
+}
+.card-item[data-depth="2"] {
+	z-index: 30;
+	transform: translateY(12px) scale(0.985) rotate(2.5deg);
+}
+.card-item[data-depth="3"] {
+	z-index: 20;
+	transform: translateY(18px) scale(0.98) rotate(-5deg);
+}
+.card-item[data-depth="4"] {
+	z-index: 10;
+	transform: translateY(24px) scale(0.975) rotate(4deg);
+}
+
+.card-item.dragging {
+	transition: none;
+	box-shadow: 0 16px 60px rgba(0, 0, 0, 0.5);
+	cursor: grabbing;
+}
+
+.badge-hint {
+	position: absolute;
+	top: 16px;
+	padding: 6px 10px;
+	font-weight: 700;
+	border-radius: 999px;
+	opacity: 0;
+	transform: scale(0.9);
+	transition: opacity 0.15s, transform 0.15s;
+	backdrop-filter: blur(6px);
+}
+.badge-like {
+	right: 16px;
+	background: rgba(16, 185, 129, 0.2);
+	border: 1px solid rgba(16, 185, 129, 0.35);
+	color: #10b981;
+}
+.badge-nope {
+	left: 16px;
+	background: rgba(239, 68, 68, 0.2);
+	border: 1px solid rgba(239, 68, 68, 0.35);
+	color: #ef4444;
+}
+
+/* Optional: smaller text for very long items */
+.card-item.long .fact-text {
+	font-size: 0.95rem;
+	line-height: 1.35;
+}
